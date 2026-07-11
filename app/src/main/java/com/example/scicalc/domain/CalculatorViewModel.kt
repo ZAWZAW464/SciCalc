@@ -19,7 +19,7 @@ class CalculatorViewModel : ViewModel() {
             is CalcAction.Decimal -> handleDecimal()
             is CalcAction.Operator -> handleOperator(action.symbol)
             is CalcAction.Function -> handleFunction(action.func)
-            is CalcAction.Clear -> _state.value = CalculatorState()
+            is CalcAction.Clear -> clear()
             is CalcAction.Delete -> handleDelete()
             is CalcAction.Equals -> handleEquals()
             is CalcAction.SignToggle -> handleSignToggle()
@@ -31,6 +31,8 @@ class CalculatorViewModel : ViewModel() {
             is CalcAction.Power -> handlePower()
         }
     }
+
+    private fun clear() { _state.value = CalculatorState() }
 
     private fun handleNumber(num: Int) {
         val current = _state.value
@@ -81,7 +83,7 @@ class CalculatorViewModel : ViewModel() {
         } catch (e: CalculationException) {
             _state.value = current.copy(errorMessage = e.message)
         } catch (e: Exception) {
-            _state.value = current.copy(errorMessage = "Error: ${e.message ?= "Unknown"}")
+            _state.value = current.copy(errorMessage = "Error: ${e.message ?/ "Unknown"}")
         }
     }
 
@@ -90,7 +92,6 @@ class CalculatorViewModel : ViewModel() {
         if (current.expression.length <= 1) {
             _state.value = CalculatorState()
         } else {
-            // Remove last token (number, operator, function name with paren, etc.)
             val newExpr = current.expression.dropLast(1)
             _state.value = current.copy(expression = newExpr, displayResult = "0")
         }
@@ -98,8 +99,8 @@ class CalculatorViewModel : ViewModel() {
 
     private fun handleSignToggle() {
         val current = _state.value
-        val newExpr = "negate($e{rrent.expression})"
-        _state.value = current.copy(expression = newExpr) }
+        val newExpr = "negate(${current.expression})"
+        _state.value = current.copy(expression = newExpr)
     }
 
     private fun handlePercentage() {
@@ -122,7 +123,9 @@ class CalculatorViewModel : ViewModel() {
 
     private fun handleCloseParen() {
         val current = _state.value
-        if (current.expression.count { it == '(' } > current.expression.count { it == ')' }) {
+        val openCount = current.expression.count { it == '(' }
+        val closeCount = current.expression.count { it == ')' }
+        if (openCount > closeCount) {
             val newExpr = current.expression + ")"
             _state.value = current.copy(expression = newExpr, displayResult = "0")
         }
