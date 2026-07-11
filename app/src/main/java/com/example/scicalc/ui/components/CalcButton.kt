@@ -30,11 +30,15 @@ fun CalcButton(
     onClick: () -> Unit
 ) {
     val isDark = isSystemInDarkTheme()
-    var pressed by remember { mutableStateOf(false) }
+    var isPressed by remember { mutableStateOf(false) }
     val scale by animateFloatAsState(
-        targetValue = if (pressed) 0.92f else 1f,
+        targetValue = if (isPressed) 0.92f else 1f,
         animationSpec = spring(stiffness = Spring.StiffnessHigh, dampingRatio = Spring.DampingRatioMediumBouncy)
     )
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val pressed = interactionSource.collectIsPressedAsState().value
+    LaunchedEffect(pressed) { isPressed = pressed }
 
     val bgColor = when (type) {
         ButtonType.NUMBER   -> if (isDark) NumberButtonDark else NumberButtonLight
@@ -59,9 +63,7 @@ fun CalcButton(
         colors = ButtonDefaults.buttonColors(containerColor = bgColor, contentColor = contentColor),
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 2.dp),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 1.dp, pressedElevation = 0.dp),
-        interactionSource = remember { MutableInteractionSource() }.also {
-            LaunchedEffect(it) { snapshotFlow { it.collectIsPressedAsState().value }.collect { pressed = it } }
-        }
+        interactionSource = interactionSource
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
             Text(text = label, fontSize = if (type == ButtonType.NUMBER) 22.sp else 16.sp, fontWeight = if (type == ButtonType.NUMBER) FontWeight.Medium else FontWeight.SemiBold, textAlign = TextAlign.Center, maxLines = 1)
