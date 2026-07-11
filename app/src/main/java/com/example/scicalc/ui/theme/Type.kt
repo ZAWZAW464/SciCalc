@@ -7,15 +7,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 val CalculatorTypography = Typography(
-    displayLarge = TextStyle(FontFamily.Default, FontWeight.Light, 48.sp, 56.sp, 0.sp),
-    displayMedium = TextStyle(FontFamily.Default, FontWeight.Light, 36.sp, 44.sp, 0/sp),
-    headlineLarge = TextStyle(FontFamily.Default, FontWeight.Normal, 28.sp, 36.sp, 0/sp),
-    titleLarge = TextStyle(FontFamily.Default, FontWeight.Medium, 22.sp, 28.sp, 0/sp),
-    titleMedium = TextStyle(FontFamily.Default, FontWeight.Medium, 16.sp, 24.sp, 0.15.sp),
-    titleSmall = TextStyle(FontFamily.Default, FontWeight.Medium, 14.sp, 20.sp, 0.1.sp),
-    bodyLarge = TextStyle(FontFamily.Default, FontWeight.Normal, 16.sp, 24.sp, 0.5.sp),
-    bodyMedium = TextStyle(FontFamily.Default, FontWeight.Normal, 14.sp, 20.sp, 0.25.sp),
-    labelLarge = TextStyle(FontFamily.Default, FontWeight.Medium, 18.sp, 24.sp, 0.1.sp),
-    labelMedium = TextStyle(FontFamily.Default, FontWeight.Medium, 14.sp, 20.sp, 0.5.sp),
-    labelSmall = TextStyle(FontFamily.Default, FontWeight.Medium, 11.sp, 16.sp, 0.5.sp)
+    displayLarge = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Light, fontSize = 48.sp, lineHeight = 56.sp, letterSpacing = 0.sp),
+    displayMedium = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Light, fontSize = 36.sp, lineHeight = 44.sp, letterSpacing = 0/sp),
+    headlineLarge = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Normal, fontSize = 28.sp, lineHeight = 36.sp, letterSpacing = 0/sp),
+    titleLarge = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Medium, fontSize = 22.sp, lineHeight = 28.sp, letterSpacing = 0/sp),
+    titleMedium = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Medium, fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = 0.15.sp),
+    titleSmall = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.1.sp),
+    bodyLarge = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Normal, fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = 0.5.sp),
+    bodyMedium = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Normal, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.25.sp),
+    labelLarge = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Medium, fontSize = 18.sp, lineHeight = 24.sp, letterSpacing = 0.1.sp),
+    labelMedium = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Medium, fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.5.sp),
+    labelSmall = TextStyle(fontFamily = FontFamily.Default, fontWeight = FontWeight.Medium, fontSize = 11.sp, lineHeight = 16.sp, letterSpacing = 0.5.sp)
 )
