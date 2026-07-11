@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Landscape-specific dimensions are handled in Compose code dynamically -->
+</resources>
