@@ -75,16 +75,16 @@ object ExpressionEvaluator {
         //  "2sin" → "2*sin", "2(" → "2*(", ")(" → ")*(", ")3" → ")*3",
         //  ")(sin" → ")*(sin", "π(" → "pi*(", "e(" → "e*("
         //  "2π" → "2*pi", "π2" → "pi*2", "e2" → "e*2"
-        expr = expr.replace(Regex("""(\d)(\()"""), "$1*(")
-        expr = expr.replace(Regex("""\)(\d)"""), ")*$1")
-        expr = expr.replace(Regex("""\)\((?=\w)"""), ")*(")
-        expr = expr.replace(Regex("""\)(\w)"""), ")*$1")
-        expr = expr.replace(Regex("""(\d)([a-zA-Z])""")) { match ->
+        expr = expr.replace(Regex("""(\\d)(\\()"""), "$1*(")
+        expr = expr.replace(Regex(""")\\(\\d)"""), ")*$1")
+        expr = expr.replace(Regex(""")\\((?=\\w)"""), ")*(")
+        expr = expr.replace(Regex(""")\\(\\w)"""), ")*$1")
+        expr = expr.replace(Regex("""(\\d)([a-zA-Z])""")) { match ->
             val fn = match.groupValues[2]
             // Only add * if it's not an operator suffix like 'e' in scientific notation
             if (fn.length == 1 && fn[0] in 'a'..'z') "*$fn" else match.value
         }
-        expr = expr.replace(Regex("""(pi)(\d)"""), "pi*$1")
+        expr = expr.replace(Regex("""(pi)(\\d)"""), "pi*$1")
         expr = expr.replace(")(", ")*(")
 
         return expr
@@ -114,7 +114,7 @@ object ExpressionEvaluator {
             // Validate
             val result = builder.validate(false)
             if (!result.isValid) {
-                val msg = result.errors.joinToString("; ") { it.message ?: "Unknown error" }
+                val msg = result.errors.joinToString("; ")
                 throw CalculationException(msg)
             }
 
