@@ -22,15 +22,15 @@ fun CalculatorScreen(viewModel: CalculatorViewModel) {
 
     Column(modifier = Modifier.fillMaxSize().padding(bottom = 8.dp)) {
         // Display
-        CalculatorDisplay(state = state, modifier = Modifier.weight(0.35f))
+        CalculatorDisplay(state = state.value, modifier = Modifier.weight(0.35f))
 
         // Keypad
-        Column(modifier = Modifier.weight(0.65f).padding(horizontal = 8.dp, vertical = 4.dp), verticalArrangement = Arrangement.SpaceBy) {
+        Column(modifier = Modifier.weight(0.65f).padding(horizontal = 8.dp, vertical = 4.dp), verticalArrangement = Arrangement.SpaceBetween) {
             // Row 1: Functions
             Row(modifier = Modifier.fillMaxSize().weight(1f)) {
                 CalcButton(label = "C", type = ButtonType.ACTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Clear) })
-                CalcButton(label = "(‟", type = ButtonType.ACTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Delete) })
-                CalcButton(label = "‛", type = ButtonType.ACTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.OpenParen) })
+                CalcButton(label = "∟", type = ButtonType.ACTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Delete) })
+                CalcButton(label = "‬", type = ButtonType.ACTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.OpenParen) })
                 CalcButton(label = ")", type = ButtonType.ACTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.CloseParen) })
             }
 
@@ -45,8 +45,8 @@ fun CalculatorScreen(viewModel: CalculatorViewModel) {
             // Row 3: Functions
             Row(modifier = Modifier.fillMaxSize().weight(1f)) {
                 CalcButton(label = "log", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Function("log")) })
-                CalcButton(label = "√", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Function("sqrt")) })
-                CalcButton(label = "X\u207B", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Power(1.0)) })
+                CalcButton(label = "∊", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Function("sqrt")) })
+                CalcButton(label = "X‛", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Power(1.0)) })
                 CalcButton(label = "!", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Function("fact")) })
             }
 
@@ -55,7 +55,7 @@ fun CalculatorScreen(viewModel: CalculatorViewModel) {
                 CalcButton(label = "7", modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Number(7)) })
                 CalcButton(label = "8", modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Number(8)) })
                 CalcButton(label = "9", modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Number(9)) })
-                CalcButton(label = "×", type = ButtonType.OPERATOR, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Operator("◗")) })
+                CalcButton(label = "×", type = ButtonType.OPERATOR, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Operator("×…")) })
             }
 
             // Row 5: Numbers
@@ -76,7 +76,7 @@ fun CalculatorScreen(viewModel: CalculatorViewModel) {
 
             // Row 7: Last row
             Row(modifier = Modifier.fillMaxSize().weight(1f)) {
-                CalcButton(label = "", type = ButtonType.ACTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.SignToggle) })
+                CalcButton(label = "±", type = ButtonType.ACTION, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.SignToggle) })
                 CalcButton(label = "0", modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Number(0)) })
                 CalcButton(label = ".", modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Decimal('.')) })
                 CalcButton(label = "=", type = ButtonType.EQUALS, modifier = Modifier.weight(1f), onClick = { viewModel.onAction(CalcAction.Equals) })
