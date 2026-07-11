@@ -18,13 +18,13 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v3
-
-      - name: Build Debug APK
-        run: chmod +x gradlew && ./gradlew assembleDebug
+      - name: Setup Gradle and Build
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --info --stacktrace
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: SciCalc-Debug-APK
