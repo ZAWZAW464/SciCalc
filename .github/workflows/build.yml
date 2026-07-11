@@ -21,7 +21,9 @@ jobs:
       - name: Setup Gradle and Build
         run: |
           chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon --info --stacktrace
+          ./gradlew assembleDebug --no-daemon
+        env:
+          GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx2048m
 
       - name: Upload APK
         if: success()
