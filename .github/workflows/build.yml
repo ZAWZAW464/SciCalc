@@ -18,12 +18,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Setup Gradle and Build
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug --no-daemon
-        env:
-          GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx2048m
+      - name: Build Debug APK
+        run: java -Xmx2048m -Dfile.encoding=UTF-8 -jar gradle/wrapper/gradle-wrapper.jar assembleDebug --no-daemon
 
       - name: Upload APK
         if: success()
