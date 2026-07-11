@@ -10,9 +10,6 @@ class CalculatorViewModel : ViewModel() {
     private val _state = MutableStateFlow(CalculatorState())
     val state: StateFlow<CalculatorState> = _state.asStateFlow()
 
-    private var isNewInput = true
-    private var pendingOperator = false
-
     fun onAction(action: CalcAction) {
         when (action) {
             is CalcAction.Number -> handleNumber(action.value)
@@ -83,7 +80,7 @@ class CalculatorViewModel : ViewModel() {
         } catch (e: CalculationException) {
             _state.value = current.copy(errorMessage = e.message)
         } catch (e: Exception) {
-            _state.value = current.copy(errorMessage = "Error: ${e.message ?/ "Unknown"}")
+            _state.value = current.copy(errorMessage = "Error: ${e.message ?: "Unknown"}")
         }
     }
 
