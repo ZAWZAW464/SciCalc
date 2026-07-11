@@ -12,28 +12,11 @@
         android:fillType="evenOdd"/>
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M40,54L26,54C24.9,54,24,54.9,24,56L24,64C24,65.1,24.9,66,26,66L34,66L36,72H44L61,72C63.21,72,65,70.21,65,68V58C65,55.79,63.21,54,61,54L40,54Z"
+        android:pathData="M40,54L26,54C24.9,54,24,54.9,24,56L24,64C24,65.1,24.9,66,26,66L34,66L36,72L44,72L61,72C63.21,72,65,70.21,65,68V57C65,55.79,63.21,54,61,54L40,54Z"
         android:strokeColor="#FFFFFF"
         android:strokeWidth="4"/>
-    <line
+    <path
+        android:pathData="M40,64h12M46,64v8M52,64v8"
         android:strokeWidth="4"
-        android:strokeColor="#FFFFFF"
-        android:x1="40"
-        android:x2="40"
-        android:y1="64"
-        android:y2="72"/>
-    <line
-        android:strokeWidth="4"
-        android:strokeColor="#FFFFFF"
-        android:x1="46"
-        android:x2="46"
-        android:y1="64"
-        android:y2="72"/>
-    <line
-        android:strokeWidth="4"
-        android:strokeColor="#FFFFFF"
-        android:x1="52"
-        android:x2="52"
-        android:y1="64"
-        android:yr2="72"/>
+        android:strokeColor="#FFFFFF"/>
 </vector>
