@@ -1,7 +1,6 @@
 package com.example.scicalc.domain
 
 import net.objecthunter.exp4j.ExpressionBuilder
-import net.objecthunter.exp4j.ValidationResult
 import net.objecthunter.exp4j.function.Function
 import kotlin.math.*
 
@@ -44,28 +43,42 @@ object ExpressionEvaluator {
     fun preprocess(raw: String): String {
         var expr = raw.trim()
 
+        // Remove leading +
         if (expr.startsWith("+")) expr = expr.drop(1)
 
+        // Replace display symbols
         expr = expr.replace("×", "*")
         expr = expr.replace("÷", "/")
         expr = expr.replace("π", "pi")
         expr = expr.replace("−", "-")
 
-        // percentage: X% -> (X/100)
-        expr = expr.replace(Regex("(\\d+\\.?\\d*)%")) { "(${it.groupValues[1]}/100)" }
+        // Auto-close unmatched parentheses so exp4j doesn't complain
+        expr = autoCloseParens(expr)
 
-        // implicit multiplication
+        // Percentage: X% -> (X/100)
+        expr = Regex("(\\d+\\.?\\d*)%").replace(expr) { "(${it.groupValues[1]}/100)" }
+
+        // Implicit multiplication
         expr = expr.replace(Regex("(\\d)\\("), "$1*(")
         expr = expr.replace(Regex("\\)(\\d)"), ")*$1")
         expr = expr.replace(Regex("\\)\\("), ")*(")
         expr = expr.replace(Regex("\\)([a-zA-Z])"), ")*$1")
-        expr = expr.replace(Regex("(\\d)([a-zA-Z])")) { match ->
+        expr = Regex("(\\d)([a-zA-Z])").replace(expr) { match ->
             val fn = match.groupValues[2]
             if (fn.length == 1 && fn[0] in 'a'..'z') "*$fn" else match.value
         }
         expr = expr.replace(Regex("(pi)(\\d)"), "pi*$1")
 
         return expr
+    }
+
+    /** Auto-close any unmatched '(' with corresponding ')' */
+    private fun autoCloseParens(expr: String): String {
+        val openCount = expr.count { it == '(' }
+        val closeCount = expr.count { it == ')' }
+        val missing = openCount - closeCount
+        if (missing <= 0) return expr
+        return expr + ")".repeat(missing)
     }
 
     fun evaluate(rawExpression: String): Double {
@@ -82,9 +95,9 @@ object ExpressionEvaluator {
                 .function(logBase)
                 .build()
 
-            val result = builder.validate(false)
-            if (!result.isValid) {
-                val msg = result.errors.joinToString("; ")
+            val validation = builder.validate(false)
+            if (!validation.isValid) {
+                val msg = validation.errors.joinToString("; ")
                 throw CalculationException(msg)
             }
 
