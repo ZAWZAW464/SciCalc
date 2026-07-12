@@ -14,18 +14,18 @@ class CalculatorViewModel : ViewModel() {
         when (action) {
             is CalcAction.Number      -> handleNumber(action.value)
             is CalcAction.Decimal     -> addDecimal()
-            is CalcAction.Operator   -> handleOperator(action.symbol)
-            is CalcAction.Function   -> addFunction(action.func)
-            is CalcAction.Clear      -> clear()
-            is CalcAction.Delete     -> backspace()
-            is CalcAction.Equals     -> evaluate()
-            is CalcAction.SignToggle -> toggleSign()
-            is CalcAction.Percentage -> addPercent()
-            is CalcAction.ConstantPi -> addText("π")
-            is CalcAction.ConstantE -> addText("e")
-            is CalcAction.OpenParen -> addText("(")
-            is CalcAction.CloseParen -> addText(")")
-            is CalcAction.Power      -> addPower()
+            is CalcAction.Operator    -> handleOperator(action.symbol)
+            is CalcAction.Function    -> addFunction(action.func)
+            is CalcAction.Clear       -> clear()
+            is CalcAction.Delete      -> backspace()
+            is CalcAction.Equals      -> evaluate()
+            is CalcAction.SignToggle  -> toggleSign()
+            is CalcAction.Percentage  -> addPercent()
+            is CalcAction.ConstantPi  -> addText("π")
+            is CalcAction.ConstantE   -> addText("e")
+            is CalcAction.OpenParen   -> addText("(")
+            is CalcAction.CloseParen  -> addText(")")
+            is CalcAction.Power       -> addPower()
         }
     }
 
@@ -68,9 +68,9 @@ class CalculatorViewModel : ViewModel() {
     private fun addFunction(func: String) {
         val c = _state.value
         val newExpr = if (c.isResultShown || c.expression == "0") {
-            func + "("
+            "$func("
         } else {
-            c.expression + func + "("
+            c.expression + "$func("
         }
         _state.value = c.copy(expression = newExpr, displayResult = "0", errorMessage = null)
     }
@@ -105,7 +105,7 @@ class CalculatorViewModel : ViewModel() {
 
     private fun toggleSign() {
         val c = _state.value
-        val newExpr = negate(${c.expression})"
+        val newExpr = "negate(${c.expression})"
         _state.value = c.copy(expression = newExpr)
     }
 
