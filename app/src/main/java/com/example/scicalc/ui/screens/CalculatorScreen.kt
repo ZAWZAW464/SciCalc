@@ -32,53 +32,67 @@ fun CalculatorScreen(viewModel: CalculatorViewModel) {
     ) {
         CalculatorDisplay(
             state = state,
-            modifier = Modifier.weight(0.3f)
+            modifier = Modifier.weight(0.28f)
         )
 
         Column(
-            modifier = Modifier.weight(0.7f),
+            modifier = Modifier.weight(0.72f),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
+            // Row 1: C Del ( )
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 CalcButton("C", type = ButtonType.ACTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Clear) }
                 CalcButton("⌫", type = ButtonType.ACTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Delete) }
                 CalcButton("(", type = ButtonType.ACTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.OpenParen) }
                 CalcButton(")", type = ButtonType.ACTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.CloseParen) }
             }
+            // Row 2: sin cos tan ln
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 CalcButton("sin", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Function("sin")) }
                 CalcButton("cos", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Function("cos")) }
                 CalcButton("tan", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Function("tan")) }
                 CalcButton("ln", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Function("ln")) }
             }
+            // Row 3: log √ xʹ !
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 CalcButton("log", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Function("log")) }
                 CalcButton("√", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Function("sqrt")) }
-                CalcButton("xʸ", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Power(1.0)) }
+                CalcButton("xʹ", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Power(1.0)) }
                 CalcButton("!", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Function("fact")) }
             }
+            // Row 4: 7 8 9 ×
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 CalcButton("7", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(7)) }
                 CalcButton("8", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(8)) }
                 CalcButton("9", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(9)) }
                 CalcButton("×", type = ButtonType.OPERATOR, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Operator("×")) }
             }
+            // Row 5: 4 5 6 ÷
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 CalcButton("4", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(4)) }
                 CalcButton("5", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(5)) }
                 CalcButton("6", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(6)) }
-                CalcButton("÷", type = ButtonType.OPERATOR, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Operator("÷")) }
+                CalcButton("÷", type = ButtonType.OPERATOR, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Operator(÷")) }
             }
+            // Row 6: 1 2 3 −
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
                 CalcButton("1", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(1)) }
                 CalcButton("2", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(2)) }
                 CalcButton("3", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(3)) }
                 CalcButton("−", type = ButtonType.OPERATOR, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Operator("−")) }
             }
+            // Row 7: % 0 . +
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
-                CalcButton("±", type = ButtonType.ACTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.SignToggle) }
+                CalcButton("%", type = ButtonType.Function, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Percentage) }
                 CalcButton("0", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Number(0)) }
                 CalcButton(".", type = ButtonType.NUMBER, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Decimal('.')) }
+                CalcButton("+", type = ButtonType.OPERATOR, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Operator("+")) }
+            }
+            // Row 8: ± π e =
+            Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
+                CalcButton("±", type = ButtonType.ACTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.SignToggle) }
+                CalcButton("π", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.ConstantPi) }
+                CalcButton("e", type = ButtonType.FUNCTION, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.ConstantE) }
                 CalcButton("=", type = ButtonType.EQUALS, modifier = Modifier.weight(1f)) { viewModel.onAction(CalcAction.Equals) }
             }
         }
