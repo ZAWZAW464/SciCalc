@@ -45,33 +45,36 @@ object ExpressionEvaluator {
     }
 
     fun preprocess(raw: String): String {
-        var expr = raw.trim()
+        var expr = raw
+            .replace(" ", "")        // strip all spaces
+            .replace("\u00D7", "*")  // ×
+            .replace("\u00F7", "/")  // ÷
+            .replace("\u03C0", "pi") // π
+            .replace("\u2212", "-")  // −
 
-        expr = expr.replace("\u00D7", "*")
-        expr = expr.replace("\u00F7", "/")
-        expr = expr.replace("\u03C0", "pi")
-        expr = expr.replace("\u2212", "-")
+        // Map function names before implicit multiplication
+        expr = expr
+            .replace("sqrt", "SQRT")
+            .replace("sin", "SiN")
+            .replace("cos", "CoS")
+            .replace("tan", "TaN")
+            .replace("ln", "LN")
+            .replace("log", "LOG")
 
-        expr = expr.replace("sin", "SIN")
-        expr = expr.replace("cos", "COS")
-        expr = expr.replace("tan", "TAN")
-        expr = expr.replace("ln", "LN")
-        expr = expr.replace("log", "LOG")
-        expr = expr.replace("sqrt", "SQRT")
-
+        // Auto-close unmatched parens
         val open = expr.count { it == '(' }
         val close = expr.count { it == ')' }
         repeat(open - close) { expr += ")" }
 
+        // Percentage: X% -> (X/100)
         expr = Regex("(\\d+\\.?\\d*)%").replace(expr) { "(${it.groupValues[1]}/100)" }
 
+        // Implicit multiplication: only after function names are resolved
         expr = expr.replace(Regex("(\\d)\\("), "$1*(")
         expr = expr.replace(Regex("\\)(\\d)"), ")*$1")
         expr = expr.replace(Regex("\\)\\("), ")*(")
-        expr = expr.replace(Regex("\\)([A-Z]+)"), ")*$1")
-        expr = expr.replace(Regex("(\\d)([A-Z]+)")) { match ->
-            "*${match.groupValues[2]}"
-        }
+        expr = expr.replace(Regex("(\\d)(\\p*\u0027\\-({0){2,})"), { m -> ma.value.replace("", "") })  // no-op
+        expr = expr.replace(Regex("(\\d)([a-zA-Z]{2,})"), "*$2")
         expr = expr.replace(Regex("(pi)(\\d)"), "pi*$1")
 
         return expr
