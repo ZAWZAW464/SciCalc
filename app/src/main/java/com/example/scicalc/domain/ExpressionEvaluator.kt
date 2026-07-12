@@ -20,33 +20,27 @@ object ExpressionEvaluator {
         }
     }
 
-    val fns = arrayOf(negate, factorial)
-
     fun preprocess(raw: String): String {
         var expr = raw.trim()
 
-        // Unicode symbols
         expr = expr.replace("×", "*")
         expr = expr.replace("÷", "/")
         expr = expr.replace("π", "pi")
         expr = expr.replace("−", "-")
 
-        // Auto-close unmatched parens
         val open = expr.count { it == '(' }
         val close = expr.count { it == ')' }
         repeat(open - close) { expr += ")" }
 
-        // Percentage: X% -> (X/100)
         expr = Regex("(\\d+\\.?\\d*)%").replace(expr) { "(${it.groupValues[1]}/100)" }
 
-        // Implicit multiplication
         expr = expr.replace(Regex("(\\d)\\("), "$1*(")
         expr = expr.replace(Regex("\\)(\\d)"), ")*$1")
         expr = expr.replace(Regex("\\)\\("), ")*(")
         expr = expr.replace(Regex("\\)([a-zA-Z])"), ")*$1")
         expr = expr.replace(Regex("(\\d)([a-zA-Z])")) { match ->
             val fn = match.groupValues[2]
-            if (fn.length == 1) { "$*$fn" } else match.value
+            if (fn.length == 1) { "*$fn" } else match.value
         }
         expr = expr.replace(Regex("(pi)(\\d)"), "pi*$1")
 
@@ -60,7 +54,8 @@ object ExpressionEvaluator {
 
         return try {
             val builder = ExpressionBuilder(processed)
-                .functions(fns)
+                .function(negate)
+                .function(factorial)
                 .build()
 
             val v = builder.validate(false)
