@@ -21,11 +21,11 @@ class CalculatorViewModel : ViewModel() {
             is CalcAction.Equals      -> evaluate()
             is CalcAction.SignToggle  -> toggleSign()
             is CalcAction.Percentage  -> addPercent()
-            is CalcAction.ConstantPi  -> addText("π")
-            is CalcAction.ConstantE   -> addText("e")
-            is CalcAction.OpenParen   -> addText("(")
-            is CalcAction.CloseParen  -> addText(")")
-            is CalcAction.Power       -> addPower()
+            is CalcAction.ConstantPi  -> appendText("π")
+            is CalcAction.ConstantE   -> appendText("e")
+            is CalcAction.OpenParen   -> appendText("(")
+            is CalcAction.CloseParen  -> appendText(")")
+            is CalcAction.Power       -> appendText("^")
         }
     }
 
@@ -33,46 +33,32 @@ class CalculatorViewModel : ViewModel() {
 
     private fun handleNumber(num: Int) {
         val c = _state.value
-        if (c.isResultShown) {
-            _state.value = CalculatorState(expression = num.toString(), displayResult = num.toString())
-        } else {
-            val newExpr = if (c.expression == "0") num.toString() else c.expression + num
-            _state.value = c.copy(expression = newExpr, displayResult = newExpr, errorMessage = null)
-        }
+        val newExpr = if (c.isResultShown || c.expression == "0") num.toString() else c.expression + num
+        _state.value = CalculatorState(expression = newExpr, displayResult = newExpr, errorMessage = null)
     }
 
     private fun addDecimal() {
         val c = _state.value
-        val lastNum = c.expression.takeLastWhile { it.isDigit() || it == '.' }
-        if ("." in lastNum) return
-        val newExpr = c.expression + "."
-        _state.value = c.copy(expression = newExpr, displayResult = newExpr)
+        val newExpr = if (c.isResultShown) "0." else c.expression + "."
+        _state.value = CalculatorState(expression = newExpr, displayResult = newExpr)
     }
 
-    private fun addText(t: String) {
+    private fun appendText(t: String) {
         val c = _state.value
         val newExpr = if (c.isResultShown || c.expression == "0") t else c.expression + t
-        _state.value = c.copy(expression = newExpr, displayResult = t, errorMessage = null)
+        _state.value = CalculatorState(expression = newExpr, displayResult = newExpr, errorMessage = null)
     }
 
     private fun handleOperator(op: String) {
         val c = _state.value
-        if (c.isResultShown) {
-            _state.value = CalculatorState(expression = c.displayResult + " $op ")
-        } else {
-            val newExpr = c.expression + " $op "
-            _state.value = c.copy(expression = newExpr, displayResult = "0", errorMessage = null)
-        }
+        val newExpr = if (c.isResultShown) c.displayResult + "$op" else c.expression + "$op"
+        _state.value = CalculatorState(expression = newExpr, displayResult = op)
     }
 
     private fun addFunction(func: String) {
         val c = _state.value
-        val newExpr = if (c.isResultShown || c.expression == "0") {
-            "$func("
-        } else {
-            c.expression + "$func("
-        }
-        _state.value = c.copy(expression = newExpr, displayResult = "0", errorMessage = null)
+        val newExpr = if (c.isResultShown || c.expression == "0") "$func(" else c.expression + "$func("
+        _state.value = CalculatorState(expression = newExpr, displayResult = "0")
     }
 
     private fun addPercent() {
@@ -81,32 +67,27 @@ class CalculatorViewModel : ViewModel() {
         _state.value = c.copy(expression = newExpr, displayResult = newExpr)
     }
 
-    private fun addPower() {
-        val c = _state.value
-        val newExpr = c.expression + "^"
-        _state.value = c.copy(expression = newExpr, displayResult = "0")
-    }
-
     private fun backspace() {
         val c = _state.value
         val expr = c.expression
         if (expr.length <= 1 || c.isResultShown || c.errorMessage != null) {
             _state.value = CalculatorState()
-        } else {
-            val trimmed = expr.trimEnd()
-            val newExpr = if (trimmed.last() in "a-zA-Z") {
-                trimmed.dropLastWhile { it != '(' }
-            } else {
-                trimmed.dropLast(1)
-            }
-            _state.value = CalculatorState(expression = newExpr, displayResult = "0")
+            return
         }
+        val trimmed = expr.trimEnd()
+        val newExpr = when {
+            trimmed.endsWith("sqrt(") || trimmed.endsWith("sin(") || trimmed.endsWith("cos(") || trimmed.endsWith("tan(") || trimmed.endsWith("ln(") || trimmed.endsWith("log(") -> trimmed.removeSuffix("(")
+            trimmed.endsWith("fact(") -> trimmed.removeSuffix("fact(")
+            trimmed.endsWith("negate(") -> trimmed.removeSuffix("negate(")
+            else -> trimmed.dropLast(1)
+        }
+        _state.value = CalculatorState(expression = newExpr, displayResult = "0")
     }
 
     private fun toggleSign() {
         val c = _state.value
         val newExpr = "negate(${c.expression})"
-        _state.value = c.copy(expression = newExpr)
+        _state.value = CalculatorState(expression = newExpr, displayResult = "0")
     }
 
     private fun evaluate() {
