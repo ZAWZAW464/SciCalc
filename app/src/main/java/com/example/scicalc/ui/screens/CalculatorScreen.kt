@@ -8,10 +8,17 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DarkMode
+import androidx.compose.material.icons.filled.LightMode
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.example.scicalc.domain.CalcAction
 import com.example.scicalc.domain.CalculatorViewModel
@@ -20,7 +27,10 @@ import com.example.scicalc.ui.components.CalcButton
 import com.example.scicalc.ui.components.CalculatorDisplay
 
 @Composable
-fun CalculatorScreen(viewModel: CalculatorViewModel) {
+fun CalculatorScreen(
+    viewModel: CalculatorViewModel,
+    isDarkTheme: MutableState<Boolean>
+) {
     val state by viewModel.state.collectAsState()
 
     Column(
@@ -30,13 +40,22 @@ fun CalculatorScreen(viewModel: CalculatorViewModel) {
             .navigationBarsPadding()
             .padding(horizontal = 8.dp, vertical = 4.dp)
     ) {
-        CalculatorDisplay(
-            state = state,
-            modifier = Modifier.weight(0.28f)
-        )
+        Row(modifier = Modifier.fillMaxWidth().padding(end = 4.dp)) {
+            CalculatorDisplay(
+                state = state,
+                modifier = Modifier.weight(1f).padding(top = 4.dp)
+            )
+            IconButton(onClick = { isDarkTheme.value = !isDarkTheme.value }) {
+                Icon(
+                    imageVector = if (isDarkTheme.value) Icons.Filled.LightMode else Icons.Filled.DarkMode,
+                    contentDescription = "Toggle theme",
+                    tint = if (isDarkTheme.value) Color(0xFFFFD54F) else Color(0xFF546E7A)
+                )
+            }
+        }
 
         Column(
-            modifier = Modifier.weight(0.72f),
+            modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Row(modifier = Modifier.fillMaxWidth().weight(1f)) {
